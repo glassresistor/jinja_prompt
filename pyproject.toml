@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jinja-prompt"
+description = "A Jinja2 extension providing a {% prompt %} block that sends its rendered contents to an LLM and returns the response as Markdown."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [
+    { name = "jinja_prompt contributors" },
+]
+keywords = ["jinja", "jinja2", "llm", "prompt", "template"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Text Processing :: Markup",
+]
+dependencies = ["jinja2>=3.0"]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+openai = ["openai>=1.0"]
+
+[project.urls]
+Homepage = "https://github.com/examples/jinja-prompt"
+Issues = "https://github.com/examples/jinja-prompt/issues"
+
+[tool.setuptools.dynamic]
+version = { attr = "jinja_prompt.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

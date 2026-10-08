@@ -8,6 +8,8 @@ the behaviour described in the README:
   Markdown.
 * Optional ``model=`` / ``system=`` attributes are forwarded to the client.
 """
+import pytest
+
 import jinja2
 from jinja2.exceptions import TemplateSyntaxError
 
@@ -134,4 +136,32 @@ def test_missing_end_tag_is_syntax_error():
     env = make_env(client)
     with pytest.raises(TemplateSyntaxError):
         env.from_string("{% prompt %}\nno closing tag\n").render()
+
+
+def test_unknown_attribute_raises_template_syntax_error():
+    client = FakeClient()
+    env = make_env(client)
+    with pytest.raises(TemplateSyntaxError) as excinfo:
+        env.from_string('{% prompt bogus="x" %}\ny\n{% endprompt %}').render()
+    assert "bogus" in str(excinfo.value)
+
+
+def test_malformed_attribute_raises_template_syntax_error():
+    client = FakeClient()
+    env = make_env(client)
+    with pytest.raises(TemplateSyntaxError):
+        env.from_string("{% prompt model %}\ny\n{% endprompt %}").render()
+
+
+def test_async_render_works():
+    import asyncio
+
+    client = FakeClient(response="async ok")
+    env = make_env(client, enable_async=True)
+    result = asyncio.run(
+        env.from_string("{% prompt %}\nhello\n{% endprompt %}").render_async()
+    )
+    assert result == "async ok"
+
+
 
