@@ -8,6 +8,7 @@ the behaviour described in the README:
   Markdown.
 * Optional ``model=`` / ``system=`` attributes are forwarded to the client.
 """
+
 import pytest
 
 import jinja2
@@ -25,9 +26,7 @@ class FakeClient:
         self.calls = []
 
     def complete(self, prompt_text, model=None, system=None):
-        self.calls.append(
-            {"prompt": prompt_text, "model": model, "system": system}
-        )
+        self.calls.append({"prompt": prompt_text, "model": model, "system": system})
         return self.response
 
 
@@ -116,8 +115,7 @@ def test_multiple_blocks_in_one_template():
 
     client = Counting()
     out, _ = render(
-        "A:{% prompt %}\none\n{% endprompt %}|"
-        "B:{% prompt %}\ntwo\n{% endprompt %}",
+        "A:{% prompt %}\none\n{% endprompt %}|" "B:{% prompt %}\ntwo\n{% endprompt %}",
         client=client,
     )
     assert out == "A:r1|B:r2"
@@ -162,6 +160,3 @@ def test_async_render_works():
         env.from_string("{% prompt %}\nhello\n{% endprompt %}").render_async()
     )
     assert result == "async ok"
-
-
-

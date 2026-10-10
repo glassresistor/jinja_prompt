@@ -11,6 +11,7 @@ pluggable client object installed on the Jinja environment as``environment.jinja
 
 Optional attributes are forwarded to the client: ``model=`` and ``system=``
 """
+
 import json
 from typing import Any, Dict, Optional
 
@@ -64,7 +65,7 @@ class PromptExtension(Extension):
         """Validate ``name=\"value\"`` attribute triples collected by parse()."""
         if len(gathered) % 3 != 0:
             raise TemplateSyntaxError(
-                "Invalid syntax for prompt tag - attributes must be name=\"value\"",
+                'Invalid syntax for prompt tag - attributes must be name="value"',
                 lineno,
             )
         attrs: Dict[str, str] = {}
@@ -77,9 +78,7 @@ class PromptExtension(Extension):
             ):
                 raise TemplateSyntaxError(
                     "Invalid attribute syntax in prompt tag - got {!r}, should be "
-                    'name="value"'.format(
-                        [t.value for t in gathered[i : i + 3]]
-                    ),
+                    'name="value"'.format([t.value for t in gathered[i : i + 3]]),
                     lineno,
                 )
             name = name_tok.value
