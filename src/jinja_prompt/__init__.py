@@ -7,13 +7,15 @@ Usage::
     {% endprompt %}
 
 The block renders its contents, sends them to a large language model via a
-pluggable client object installed on the Jinja environment as``environment.jinja_prompt_client``, and inserts the response back intothe template as Markdown.
+pluggable client object installed on the Jinja environment as
+``environment.jinja_prompt_client``, and inserts the response back into the
+template as Markdown.
 
 Optional attributes are forwarded to the client: ``model=`` and ``system=``
 """
 
 import json
-from typing import Any, Dict, Optional
+from typing import Dict
 
 from jinja2 import nodes
 from jinja2.exceptions import TemplateSyntaxError
