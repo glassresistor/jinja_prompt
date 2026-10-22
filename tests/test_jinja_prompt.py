@@ -160,3 +160,54 @@ def test_async_render_works():
         env.from_string("{% prompt %}\nhello\n{% endprompt %}").render_async()
     )
     assert result == "async ok"
+
+
+def test_whitespace_control_operators():
+    out, client = render(
+        "{%- prompt %}\nhi\n{%- endprompt %}",
+        client=FakeClient(response="W"),
+    )
+    assert out == "W"
+    assert client.calls[0]["prompt"] == "hi"
+
+
+def test_nested_prompt_blocks():
+    class Echo:
+        def __init__(self):
+            self.calls = []
+
+        def complete(self, prompt_text, model=None, system=None):
+            self.calls.append(prompt_text)
+            return f"<{prompt_text}>"
+
+    client = Echo()
+    env = make_env(client)
+    out = env.from_string(
+        '{% prompt model="outer" %}{% prompt %}inner{% endprompt %}{% endprompt %}'
+    ).render()
+    assert out == "<<inner>>"
+    assert client.calls == ["inner", "<inner>"]
+
+
+def test_extra_whitespace_between_attributes_is_tolerated():
+    client = FakeClient(response="ok")
+    env = make_env(client)
+    source = '{% prompt\nmodel="a"\n  system="b"\n%}\nhi\n{% endprompt %}'
+    out = env.from_string(source).render()
+    assert out == "ok"
+    assert client.calls[0] == {"prompt": "hi", "model": "a", "system": "b"}
+
+
+def test_attribute_value_may_be_single_quoted():
+    # Jinja's lexer accepts single-quoted strings inside tags.
+    client = FakeClient(response="ok")
+    env = make_env(client)
+    env.from_string("{% prompt system='be nice' %}\nx\n{% endprompt %}").render()
+    assert client.calls[0]["system"] == "be nice"
+
+
+def test_non_string_attribute_value_raises():
+    client = FakeClient()
+    env = make_env(client)
+    with pytest.raises(TemplateSyntaxError):
+        env.from_string("{% prompt model=4 %}\nx\n{% endprompt %}").render()
