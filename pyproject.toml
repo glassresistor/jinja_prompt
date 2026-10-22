@@ -18,6 +18,12 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Text Processing :: Markup",
 ]
 dependencies = ["jinja2>=3.0"]
@@ -38,6 +44,12 @@ version = { attr = "jinja_prompt.__version__" }
 where = ["src"]
 namespaces = false
 
+[tool.setuptools.package-data]
+jinja_prompt = ["py.typed"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+
+[tool.black]
+line-length = 88
