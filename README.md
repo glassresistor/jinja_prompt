@@ -82,12 +82,13 @@ is evaluated lazily (during rendering), and its rendered contents are sent
 verbatim as the user prompt after surrounding whitespace is stripped -- so
 Jinja variables, loops, and conditionals all work inside the block.
 
-## Testing this package
+## Testing and linting this package
 
 ```bash
 python -m venv .venv && source .venv/bin/activate   # or: python -m venv venv
 pip install -e ".[test]"
-pytest
+pytest                # run the test suite
+black src tests       # format code; CI checks formatting with black --check
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow.

@@ -20,7 +20,14 @@ and adapters for additional LLM providers.
    pytest
    ```
 
-All tests use mocked LLM clients — no API keys or network access required.
+   All tests use mocked LLM clients — no API keys or network access required.
+
+3. Format your code with [Black](https://black.readthedocs.io) before
+   submitting (CI checks formatting with `black --check`):
+
+   ```bash
+   black src tests
+   ```
 
 ## How the code is organized
 
@@ -52,6 +59,9 @@ cannot be used for both sync and async rendering paths. `parse()` selects
 - Open an issue first for large changes.
 - Create a branch off `main`, make focused commits, and add/adjust tests as
   appropriate (`pytest`).
+- Continuous integration (GitHub Actions, `.github/workflows/ci.yml`) runs
+  `black --check` plus the pytest suite on Python 3.8–3.13 for every pull
+  request; keep both green.
 - Submit a pull request against `main`; include a description of what changed
   and why.
 
@@ -59,7 +69,7 @@ cannot be used for both sync and async rendering paths. `parse()` selects
 
 1. Update `__version__` in `src/jinja_prompt/__init__.py`.
 2. Ensure tests pass: `pytest`.
-3. Build artifacts: `python -m build` (needs the `build` extra).
+3. Build artifacts: `pip install build && python -m build`.
 4. Check metadata: `twine check dist/*`.
 5. Upload to PyPI with [Twine](https://twine.pypa.io): `twine upload dist/*`
    (or via a CI workflow using API tokens — never account passwords).
